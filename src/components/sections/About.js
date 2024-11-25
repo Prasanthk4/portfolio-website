@@ -71,7 +71,7 @@ const About = () => {
               <div className="space-y-2 border-b border-gray-200 dark:border-gray-700 pb-6">
                 <div className="flex justify-between items-start">
                   <h4 className="text-xl font-medium dark:text-white">Woxsen University</h4>
-                  <span className="text-gray-600 dark:text-gray-400">May 2024</span>
+                  <span className="text-gray-600 dark:text-gray-400">Graduated May 2024</span>
                 </div>
                 <p className="text-lg text-indigo-600 dark:text-indigo-400">MBA, Business Analytics & Finance</p>
                 <p className="text-gray-600 dark:text-gray-400">GPA: 2.99/4</p>
@@ -86,7 +86,7 @@ const About = () => {
               <div className="space-y-2">
                 <div className="flex justify-between items-start">
                   <h4 className="text-xl font-medium dark:text-white">St. Mary's Degree College</h4>
-                  <span className="text-gray-600 dark:text-gray-400">Completed Dec 2021</span>
+                  <span className="text-gray-600 dark:text-gray-400">Graduated Dec 2021</span>
                 </div>
                 <p className="text-lg text-indigo-600 dark:text-indigo-400">B.COM, Computers</p>
                 <p className="text-gray-600 dark:text-gray-400">CGPA: 7.9/10</p>

@@ -78,36 +78,36 @@ const TypewriterText = () => {
 
 const Hero = () => {
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 py-20">
-      <div className="container mx-auto px-4">
+    <section id="home" className="min-h-screen flex items-center justify-center py-10 sm:py-20">
+      <div className="container mx-auto px-4 py-8 sm:py-16">
         <div className="flex flex-col lg:flex-row items-center justify-between">
           {/* Text Content */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0"
+            transition={{ duration: 0.6 }}
+            className="lg:w-1/2 w-full lg:pr-12 mb-8 lg:mb-0 text-center lg:text-left"
           >
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
               <span className="block text-gray-800 dark:text-white">Welcome to my portfolio</span>
               <span className="block text-indigo-600 dark:text-indigo-400 mt-2">Sai Rama Prasanth K</span>
             </h1>
             <TypewriterText />
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6 mt-6">
               <a
                 href="#projects"
-                className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg transition-all hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-lg transition-all hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center"
               >
                 View My Work
               </a>
               <a
                 href="#contact"
-                className="px-8 py-3 border-2 border-indigo-600 dark:border-indigo-400 text-indigo-600 dark:text-indigo-400 font-medium rounded-lg transition-all hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-400 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="w-full sm:w-auto px-8 py-3 border-2 border-indigo-600 dark:border-indigo-400 text-indigo-600 dark:text-indigo-400 font-medium rounded-lg transition-all hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-400 dark:hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-center"
               >
                 Contact Me
               </a>
             </div>
-            <div className="flex items-center lg:justify-start space-x-6 mt-6 ml-8 sm:ml-12">
+            <div className="flex items-center justify-center lg:justify-start space-x-6 mt-6">
               <a
                 href="https://github.com/Prasanthk4"
                 target="_blank"
@@ -115,7 +115,7 @@ const Hero = () => {
                 className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors"
                 aria-label="GitHub Profile"
               >
-                <FaGithub className="w-6 h-6" />
+                <FaGithub className="w-8 h-8 sm:w-6 sm:h-6" />
               </a>
               <a
                 href="https://www.linkedin.com/in/sai-rama-prasanth-k-076777246/"
@@ -124,7 +124,7 @@ const Hero = () => {
                 className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors"
                 aria-label="LinkedIn Profile"
               >
-                <FaLinkedin className="w-6 h-6" />
+                <FaLinkedin className="w-8 h-8 sm:w-6 sm:h-6" />
               </a>
             </div>
           </motion.div>
@@ -133,10 +133,12 @@ const Hero = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className="lg:w-1/2"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="lg:w-1/2 w-full h-[240px] sm:h-[280px] lg:h-[380px] flex items-center justify-center"
           >
-            <AnimatedSphere />
+            <div className="w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] lg:w-[380px] lg:h-[380px]">
+              <AnimatedSphere />
+            </div>
           </motion.div>
         </div>
       </div>

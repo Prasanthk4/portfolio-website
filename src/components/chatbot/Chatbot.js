@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { FaDownload, FaPaperPlane, FaTimes, FaComments } from 'react-icons/fa';
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
@@ -10,7 +11,7 @@ const Chatbot = () => {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -115,6 +116,12 @@ const Chatbot = () => {
       return "I am a fresh graduate actively seeking opportunities to apply my skills in data analysis, machine learning, and web development. While I don't have formal work experience, I have developed strong practical skills through various projects and academic work.";
     }
 
+    if (lowerCaseMessage.includes('resume') || lowerCaseMessage.includes('cv') || lowerCaseMessage.includes('download')) {
+      return "You can download my resume here: " +
+             "[Download Resume](/Sai Rama Prasanth K.pdf)\n\n" +
+             "Is there anything specific from my experience you'd like to know about?";
+    }
+
     // Default response
     return "I can tell you about my education, skills, projects, experience, certifications, or how to contact me. What would you like to know?";
   };
@@ -142,26 +149,88 @@ const Chatbot = () => {
     handleSubmit({ preventDefault: () => {} });
   };
 
+  const handleResumeDownload = () => {
+    // Replace with your actual resume file path
+    const resumeUrl = '/resume.pdf';
+    const link = document.createElement('a');
+    link.href = resumeUrl;
+    link.download = 'SaiRamaPrasanth_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const renderMessage = (text) => {
+    // Regular expression to match markdown-style links: [text](url)
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = linkRegex.exec(text)) !== null) {
+      // Add text before the link
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+
+      // Add the link
+      parts.push(
+        <a
+          key={match.index}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-700 underline"
+          download={match[2].includes('.pdf')}
+        >
+          {match[1]}
+        </a>
+      );
+
+      lastIndex = linkRegex.lastIndex;
+    }
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {isOpen ? (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-80 max-h-[500px] flex flex-col">
-          {/* Header */}
-          <div className="flex justify-between items-center p-4 border-b dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Chat with me!</h3>
-            <button 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          className="w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+        >
+          {/* Chat Header */}
+          <div className="flex justify-between items-center p-4 bg-indigo-600 text-white">
+            <h3 className="font-medium">Portfolio Assistant</h3>
+            <button
               onClick={() => setIsOpen(false)}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-              aria-label="Close chat"
+              className="p-1 hover:bg-indigo-700 rounded-full transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <FaTimes className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Chat messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Chat Content */}
+          <div className="h-96 overflow-y-auto p-4 space-y-4">
+            {/* Download Resume Button at the top of chat */}
+            <div className="flex justify-center mb-4">
+              <button
+                onClick={handleResumeDownload}
+                className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
+              >
+                <FaDownload className="w-5 h-5" />
+                <span className="font-medium">Download Resume</span>
+              </button>
+            </div>
+
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -176,73 +245,67 @@ const Chatbot = () => {
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white'
                   }`}
                 >
-                  {message.content}
+                  <p className="whitespace-pre-wrap">{message.content}</p>
                 </div>
               </div>
             ))}
-            {/* Quick Actions */}
-            {messages.length === 0 && (
-              <div className="space-y-2">
-                <p className="text-gray-600 dark:text-gray-400 text-center mb-4">
-                  Hello! How can I help you today?
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => handleQuickAction("Tell me about your skills")}
-                    className="p-2 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-800 dark:text-white"
-                  >
-                    Skills
-                  </button>
-                  <button
-                    onClick={() => handleQuickAction("What projects have you worked on?")}
-                    className="p-2 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-800 dark:text-white"
-                  >
-                    Projects
-                  </button>
-                  <button
-                    onClick={() => handleQuickAction("What is your education background?")}
-                    className="p-2 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-800 dark:text-white"
-                  >
-                    Education
-                  </button>
-                  <a
-                    href="/Sai Rama Prasanth K.pdf"
-                    download
-                    className="p-2 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-800 dark:text-white text-center"
-                  >
-                    Download CV
-                  </a>
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3">
+                  <p>Typing...</p>
                 </div>
               </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
 
-          {/* Input area */}
-          <form onSubmit={handleSubmit} className="p-4 border-t dark:border-gray-700">
-            <div className="flex space-x-2">
+          {/* Quick Actions */}
+          <div className="p-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <div className="flex flex-wrap gap-2 mb-2">
+              <button
+                onClick={() => handleQuickAction("Tell me about your education")}
+                className="px-3 py-1 text-sm bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors"
+              >
+                Education
+              </button>
+              <button
+                onClick={() => handleQuickAction("What are your skills?")}
+                className="px-3 py-1 text-sm bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors"
+              >
+                Skills
+              </button>
+            </div>
+          </div>
+
+          {/* Chat Input */}
+          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+            <form onSubmit={handleSubmit} className="flex space-x-2">
               <input
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder="Type your message..."
-                className="flex-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
               />
               <button
                 type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                Send
+                <FaPaperPlane className="w-5 h-5" />
               </button>
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
+        </motion.div>
       ) : (
-        <button 
+        <motion.button
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
           onClick={() => setIsOpen(true)}
-          className="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition-colors"
+          className="bg-indigo-600 text-white p-4 rounded-full hover:bg-indigo-700 transition-colors shadow-lg"
         >
-          Open Chat
-        </button>
+          <FaComments className="w-6 h-6" />
+        </motion.button>
       )}
     </div>
   );
